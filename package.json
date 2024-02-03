@@ -1,13 +1,13 @@
 {
-  "name": "api",
+  "name": "RealStateProject",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon src/index.js",
-    "start": "node src/index.js",
-    "build": "npm install && npm install --prefix client && npm run build --prefix client"
+    "dev": "nodemon API/index.js",
+    "start": "node API/index.js",
+    "build": "npm install && npm install --prefix RealState && npm run build --prefix RealState"
   },
   "keywords": [],
   "author": "",
@@ -16,6 +16,7 @@
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.4.1",
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "mongoose": "^8.1.1"
   }
 }
