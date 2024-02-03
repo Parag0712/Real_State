@@ -1,7 +1,6 @@
 import express from 'express'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
-
 const app = express();
 
 // Cors 
@@ -17,6 +16,16 @@ app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 app.use(express.static("public"));
 app.use(cookieParser());
 // Here Out Routes
+
+app.use((err,req,res,next)=>{
+    const statusCode  = err.statusCode || 500
+    const message = err.message || 'Internal Server Error'
+    return res.status(statusCode).json({
+        success:false,
+        statusCode,
+        message
+    })
+})
 
 import authRouter from './routes/auth.route.js';
 app.use("/api/v1/auth", authRouter);
