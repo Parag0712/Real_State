@@ -11,6 +11,7 @@ function validateField(value, fieldName) {
     }
 }
 
+// Genrate-Token
 const generateAccessTokenAndRefreshToken = async (userId) => {
     try {
         const user = await User.findById(userId);
@@ -85,7 +86,6 @@ export const register = asyncHandler(async (req, res) => {
 export const login = asyncHandler(async (req, res) => {
     const { email, username, password } = req.body;
 
-
     if (!username && !email) {
         return res.status(400).json({
             message: "Username or Email is required"
@@ -142,7 +142,7 @@ export const logout = asyncHandler(async (req, res) => {
     );
 
     const options = {
-        httpOnly: true
+        httpOnly: true,
     }
 
     return res

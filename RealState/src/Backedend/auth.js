@@ -1,53 +1,66 @@
+import axios from "axios";
+
 class Auth {
     // We Need ENV  
 
     // Register Function
-    async createAccount(formData) {
+    async createAccount({ username, email, password }) {
         try {
-            const response = await axios.post('/api/auth/register', formData, {
+            const response = await axios.post('/api/v1/auth/register', {
+                email,
+                username,
+                password
+            }, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
             });
-            const data = response.data;
-            console.log(data);
-            // if (data.success === false) {
-            //     return;
-            // }
+            return response.data;
         } catch (error) {
-            throw error.message
+            if (error.response.data) {
+                throw error.response.data.message;
+            } else {
+                throw error
+            }
         }
     }
 
-
     // Login Function
-    async login(formData) {
+    async login({ email, username = "", password }) {
         try {
-            const response = await axios.post('/api/auth/login', formData, {
+            const response = await axios.post('/api/v1/auth/login', {
+                email,
+                username,
+                password
+            }, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
             });
-            const data = response.data;
-            console.log(data);
-            // if (data.success === false) {
-            //     return;
-            // }
+            return response.data;
         } catch (error) {
-            throw error.message
+            if (error.response.data) {
+                throw error.response.data.message;
+            } else {
+                throw error
+            }
         }
     }
 
     // Logout Function
-    async logout(){
+    async logout() {
         try {
-            const response = await axios.post("/api/auth/login");
+            const response = await axios.post("/api/v1/auth/logout");
             return response.data
         } catch (error) {
-            throw error.message
+            if (error.response.data) {
+                throw error.response.data.message;
+            } else {
+                throw error
+            }
         }
     }
 }
 
-
-export default AuthService = new Auth();
+const AuthService = new Auth();
+export default AuthService
