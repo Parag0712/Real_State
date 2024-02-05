@@ -24,7 +24,6 @@ function SignIn() {
       .then((val) => {
         const accessToken = val.data.accessToken;
         const userData = val.data.user
-        console.log(val.data.mes);
         dispatch(signInSuccess(userData));
         toast.success(val.message)
         navigate('/')

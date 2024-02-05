@@ -12,15 +12,16 @@ import { useDispatch, useSelector } from 'react-redux'
 import AuthService from './Backedend/auth'
 import { signInSuccess } from './redux/User/userSlice'
 import { motion,AnimatePresence } from 'framer-motion'
+import ProtectedRoute from './components/ProtectedRoute'
 
 
 function App() {
 
-
-
   const { currentUser } = useSelector((state) => state.user);
   console.log(currentUser ? currentUser : "");
   const dispatch = useDispatch();
+
+  
   // UseEffect 
   useEffect(() => {
     AuthService.getAuthUser()
@@ -33,19 +34,22 @@ function App() {
         console.log(error);
       })
   }, [])
-  
+
   return (
     <>
           <BrowserRouter>
-            <Header />
             {/* Same as */}
+            <Header />
             <ToastContainer />
             <Routes>
               <Route path='/' element={<Home />}></Route>
               <Route path='/sign-in' element={<SignIn />}></Route>
               <Route path='/sign-up' element={<SignUp />}></Route>
               <Route path='/about' element={<About />}></Route>
-              <Route path='/profile' element={<Profile />}></Route>
+              {/* PrivateRoute */}
+              <Route element={<ProtectedRoute />}>
+                <Route path='/profile' element={<Profile />}></Route>
+              </Route>
             </Routes>
           </BrowserRouter>
     </>

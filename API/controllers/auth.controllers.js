@@ -63,11 +63,7 @@ export const register = asyncHandler(async (req, res) => {
     }
 
     const { accessToken, refreshToken } = await generateAccessTokenAndRefreshToken(user._id);
-    const obj = {
-        accessToken: accessToken,
-        data: user,
-        message: "Register Successfully"
-    }
+
 
     return res
         .status(200)
@@ -81,6 +77,64 @@ export const register = asyncHandler(async (req, res) => {
             }, "User Register Successfully")
         )
 });
+
+export const google = asyncHandler(async (req, res) => {
+    const { username, email, avatar } = req.body;
+    const user = await User.findOne({ email })
+    if (user) {
+        // If User Exist
+        const { accessToken, refreshToken } = await generateAccessTokenAndRefreshToken(user._id);
+        user.password = undefined;
+        user.refreshToken = undefined;
+
+        return res
+            .status(200)
+            .cookie('accessToken', accessToken, { httpOnly: true })
+            .cookie("refreshToken", refreshToken, { httpOnly: true })
+            .json(
+                new ApiResponse(200, {
+                    user,
+                    accessToken: accessToken,
+                    refreshToken: refreshToken
+                }, "User Login Successfully")
+            )
+    } else {
+        const generatedPassword =
+            Math.random().toString(36).slice(-8) +
+            Math.random().toString(36).slice(-8);
+
+        const user = await User.create({
+            username: username.split(' ').join('').toLowerCase()+
+            Math.random().toString(36).slice(-4),
+            email: email,
+            avatar: avatar,
+            password: generatedPassword,
+        });
+
+        user.password = undefined;
+        user.refreshToken = undefined;
+
+        if (!user) {
+            return res.status(500).json(
+                { message: "Something went wrong while registering the user" }
+            )
+        }
+
+        const { accessToken, refreshToken } = await generateAccessTokenAndRefreshToken(user._id);
+
+        return res
+            .status(200)
+            .cookie('accessToken', accessToken, { httpOnly: true })
+            .cookie("refreshToken", refreshToken, { httpOnly: true })
+            .json(
+                new ApiResponse(200, {
+                    user,
+                    accessToken: accessToken,
+                    refreshToken: refreshToken
+                }, "User Register Successfully")
+            )
+    }
+})
 
 // Login API
 export const login = asyncHandler(async (req, res) => {

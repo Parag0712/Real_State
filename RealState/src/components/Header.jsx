@@ -57,12 +57,12 @@ function Header() {
                             (<Link to='/profile' onClick={() => setMobile(false)}>
                                 <img
                                     src={currentUser.avatar}
-                                    className='rounded-full h-7 w-7 object-cover'
+                                    className=' rounded-full h-7 w-7 object-cover'
                                     alt='profile'
                                 />
                             </Link>) : (
                                 <Link to='/sign-in' onClick={() => setMobile(false)}>
-                                    <li className=' text-[18px] duration-75  ease-in  sm:inline text-white hover:text-gray-300'> Sign in</li>
+                                    <li className='text-[18px] duration-75 ease-in  sm:inline text-white hover:text-gray-300'> Sign in</li>
                                 </Link>
                             )
                     }

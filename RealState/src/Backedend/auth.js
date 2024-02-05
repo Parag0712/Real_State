@@ -68,6 +68,27 @@ class Auth {
         }
     }
 
+    async googleAuth({username,email,avatar}){
+        try {
+            const response = await this.api.post('/google', {
+                email,
+                username,
+                avatar
+            }, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            return response.data;
+        } catch (error) {
+            if (error.response.data) {
+                throw error.response.data.message;
+            } else {
+                throw error
+            }
+        }
+    }
     // Logout Function
     async logout() {
         try {
