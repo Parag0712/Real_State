@@ -10,7 +10,7 @@ const Input = React.forwardRef(
         const id = useId();
         return (
             <>
-            <input
+                <input
                     id={id}
                     placeholder={placeholder}
                     className='border p-3 rounded-lg'

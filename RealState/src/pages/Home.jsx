@@ -1,8 +1,11 @@
 import React from 'react'
+import AnimationContainer from '../components/AnimationContainer'
 
 function Home() {
   return (
-    <div>Home</div>
+    <AnimationContainer>
+      <div>Home</div>
+    </AnimationContainer>
   )
 }
 

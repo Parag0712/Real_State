@@ -1,8 +1,12 @@
 import React from 'react'
+import AnimationContainer from '../components/AnimationContainer'
 
 function About() {
   return (
-    <div>About</div>
+    <AnimationContainer>
+
+      <div>About</div>
+    </AnimationContainer>
   )
 }
 

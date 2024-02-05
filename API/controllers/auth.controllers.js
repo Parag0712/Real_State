@@ -127,6 +127,15 @@ export const login = asyncHandler(async (req, res) => {
         )
 });
 
+// give Login User Details
+export const getCurrentUser = asyncHandler(async (req, res) => {
+    return res
+        .status(200)
+        .json(
+            new ApiResponse(200, { user: req.user }, "User fetched successfully")
+        )
+});
+
 // Logout API
 export const logout = asyncHandler(async (req, res) => {
     await User.findByIdAndUpdate(
