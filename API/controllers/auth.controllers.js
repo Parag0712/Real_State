@@ -2,14 +2,8 @@ import { User } from "../models/user.model.js";
 import ApiError from "../utils/ApiError.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import asyncHandler from "../utils/asyncHandler.js"
+import { validateField } from "../utils/Validate.js";
 
-
-// Validate Field
-function validateField(value, fieldName) {
-    if (value.trim() === "") {
-        return res.status(400).json(`${fieldName} is required`)
-    }
-}
 
 // Genrate-Token
 const generateAccessTokenAndRefreshToken = async (userId) => {

@@ -28,7 +28,10 @@ app.use((err,req,res,next)=>{
 })
 
 import authRouter from './routes/auth.route.js';
+import userRouter from './routes/user.route.js'
+
 app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/user", userRouter);
 // Export App
 app.get("/", function (req, res) {
     res.send("helo")
