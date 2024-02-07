@@ -4,7 +4,7 @@ class Auth {
 
     constructor() {
         this.api = axios.create({
-            baseURL: '/api/v1/auth', // Assuming your API base URL is /api/v1/auth
+            baseURL: '/api/v1/', // Assuming your API base URL is /api/v1/auth
             withCredentials: true // Adding credentials option
         });
     }
@@ -35,7 +35,7 @@ class Auth {
     // Login Function
     async login({ email, username = "", password }) {
         try {
-            const response = await this.api.post('/login', {
+            const response = await this.api.post('auth/login', {
                 email,
                 username,
                 password
@@ -54,10 +54,32 @@ class Auth {
         }
     }
 
+    async updateAccount({ email, username , password ,avatar }) {
+        try {
+            const response = await this.api.patch('user/update-account', {
+                email,
+                username,
+                password,
+                avatar
+            }, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            return response.data;
+        } catch (error) {
+            if (error.response.data) {
+                throw error.response.data.message;
+            } else {
+                throw error
+            }
+        }
+    }
+
     //Get Current User
     async getAuthUser(){
         try {
-            const response = await this.api.get('/get-user');
+            const response = await this.api.get('auth/get-user');
             return response.data;
         } catch (error) {
             if (error.response.data) {
@@ -70,7 +92,7 @@ class Auth {
 
     async googleAuth({username,email,avatar}){
         try {
-            const response = await this.api.post('/google', {
+            const response = await this.api.post('auth/google', {
                 email,
                 username,
                 avatar
@@ -92,7 +114,21 @@ class Auth {
     // Logout Function
     async logout() {
         try {
-            const response = await this.api.post("/logout");
+            const response = await this.api.post("auth/logout");
+            return response.data
+        } catch (error) {
+            if (error.response.data) {
+                throw error.response.data.message;
+            } else {
+                throw error
+            }
+        }
+    }
+
+    // delete function
+    async delete() {
+        try {
+            const response = await this.api.delete("user/delete-account");
             return response.data
         } catch (error) {
             if (error.response.data) {

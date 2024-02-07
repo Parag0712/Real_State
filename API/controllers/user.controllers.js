@@ -63,7 +63,7 @@ export const deleteAccount = asyncHandler(async (req, res, next) => {
             .status(200)
             .clearCookie("accessToken", { httpOnly: true })
             .clearCookie("refreshToken", { httpOnly: true })
-            .json(new ApiResponse(200, {}, "User Account Delete Out"))
+            .json(new ApiResponse(200, {}, "User Account Deleted"))
     } else {
         return res.status(409).json({
             message: "Internal Server Error"

@@ -18,7 +18,7 @@ import ProtectedRoute from './components/ProtectedRoute'
 function App() {
 
   const { currentUser } = useSelector((state) => state.user);
-  console.log(currentUser ? currentUser : "");
+  // console.log(currentUser ? currentUser : "");
   const dispatch = useDispatch();
 
   
@@ -29,9 +29,9 @@ function App() {
         const userData = val.data.user
         dispatch(signInSuccess(userData));
         // Store You Data In Redux
-        console.log(userData);
+        // console.log(userData);
       }).catch((error) => {
-        console.log(error);
+        // console.log(error);
       })
   }, [])
 

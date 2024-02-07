@@ -1,12 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react'
 import AuthService from '../Backedend/auth'
 import { useDispatch, useSelector } from 'react-redux'
-import { signOutUserFailure, signOutUserStart, signOutUserSuccess } from '../redux/User/userSlice'
+import { signOutUserFailure, signOutUserStart, signOutUserSuccess, updateUserFailure, updateUserStart, updateUserSuccess } from '../redux/User/userSlice'
 import AnimationContainer from '../components/AnimationContainer'
 import { GoogleAuthProvider, getAuth, signOut } from 'firebase/auth'
-import { Link } from 'react-router-dom'
+import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage'
+import { Link, useNavigate } from 'react-router-dom'
 import Input from '../components/Input'
 import { useForm } from 'react-hook-form'
+import { app } from '../Backedend/firebase'
+import { toast } from 'react-toastify'
+import { store } from '../redux/store'
+import persistStore from 'redux-persist/es/persistStore'
 
 function Profile() {
   const dispatch = useDispatch()
@@ -15,47 +20,122 @@ function Profile() {
   const [emailError, setEmailError] = useState();
   const [passwordError, setPasswordError] = useState();
   const [userNameError, setUserNameError] = useState();
-
+  const [filePercentage, setFilePercentage] = useState(0);
+  const [fileUploadError, setFileUploadError] = useState(false);
+  const navigate = useNavigate();
   const fileRef = useRef(null);
-  const {handleSubmit,register,trigger} = useForm({
-    defaultValues: {
-      username:currentUser.username || "",
-      email:currentUser.email,
-      password:"",
-    }
-  });
+
+
+  // useEffect(() => {
+  //   if (file) {
+  //     handleFileUpload(file);
+  //   }
+  // }, [file])
+  const handleFileUpload = (file) => {
+    return new Promise((resolve, reject) => {
+      const storage = getStorage(app);
+      const fileName = new Date().getTime() + file.name;
+      const storageRef = ref(storage, fileName);
+      const uploadTask = uploadBytesResumable(storageRef, file);
+
+      uploadTask.on('state_changed', (snapshot) => {
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        setFilePercentage(Math.round(progress));
+      }, (error) => {
+        setFileUploadError(true);
+        reject(error); // Reject the promise if an error occurs
+      }, () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          resolve(downloadURL); // Resolve the promise with the download URL
+        }).catch((error) => {
+          setFileUploadError(true);
+          reject(error); // Reject the promise if an error occurs while getting the download URL
+        });
+      });
+    });
+  };
 
   //Handle Submit
-  const handleUpdate = (data) => { 
-    const img = data.avatar[0];
+  const handleUpdate = (data) => {
+
+
+    if (file) {
+      handleFileUpload(file).then((imgData) => {
+        dispatch(updateUserStart());
+        data.avatar = imgData;
+        AuthService.updateAccount(data).then((val) => {
+          const userData = val.data.user
+          dispatch(updateUserSuccess(userData));
+          toast.success(val.message)
+          navigate('/')
+        }).catch((error) => {
+          dispatch(updateUserFailure(error));
+          toast.error(error)
+        })
+      })
+    } else {
+      data.avatar = currentUser.avatar;
+      AuthService.updateAccount(data).then((val) => {
+        const userData = val.data.user
+        dispatch(updateUserSuccess(userData));
+        toast.success(val.message)
+        navigate('/')
+      }).catch((error) => {
+        dispatch(updateUserFailure(error));
+        toast.error(error)
+      })
+    }
   }
+
+  // React-form-hook
+  const { handleSubmit, register } = useForm({
+    defaultValues: {
+      username: currentUser.username || "",
+      email: currentUser.email,
+      password: "",
+    }
+  });
 
   // handleShowListings
   const handleShowListings = () => { }
   //Handle Listing Delete
   const handleListingDelete = () => { }
-
   // Handle Logout
   const handleSignOut = () => {
     dispatch(signOutUserStart());
     AuthService.logout()
-      .then(() => {
+      .then((data) => {
+        persistStore(store).purge();
+        toast.success(data.message);
         dispatch(signOutUserSuccess());
       }).catch((error) => {
+        toast.error(error);
         dispatch(signOutUserFailure(error));
       })
   }
 
   // Handle Delete User
-  const handleDeleteUser = () => { }
+  const handleDeleteUser = () => {
+    dispatch(signOutUserStart());
+    AuthService.delete()
+      .then((data) => {
+        persistStore(store).purge();
+        toast.success(data.message);
+        dispatch(signOutUserSuccess());
+      }).catch((error) => {
+        toast.error(error);
+        dispatch(signOutUserFailure(error));
+      })
+  }
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-        // Display image preview
-        setSelectedImage(URL.createObjectURL(file));
+      // Display image preview
+      setSelectedImage(URL.createObjectURL(file));
     }
-};
+  };
+
   return (
     <AnimationContainer>
       <div className=' p-3 max-w-lg mx-auto'>
@@ -64,32 +144,31 @@ function Profile() {
           <Input
             type='file'
             accept='image/*'
-            onChange={(e) => setFile(e.target.files[0])}
             hidden
-            {...register('avatar')} 
-            id="avatarInput"
+            onChange={(e) => setFile(e.target.files[0])}
+            ref={fileRef}
           >
           </Input>
 
           <img
-            onClick={() => document.getElementById("avatarInput").click()}
-            src={ file?URL.createObjectURL(file):currentUser.avatar}
+            onClick={() => fileRef.current.click()}
+            src={file ? URL.createObjectURL(file) : currentUser.avatar}
             alt='profile'
             className='rounded-full h-24 w-24 object-cover cursor-pointer self-center mt-2'
           />
-          {/* <p className='text-sm self-center'>
+          <p className='text-sm self-center'>
             {fileUploadError ? (
               <span className='text-red-700'>
                 Error Image upload (image must be less than 2 mb)
               </span>
-            ) : filePerc > 0 && filePerc < 100 ? (
-              <span className='text-slate-700'>{`Uploading ${filePerc}%`}</span>
-            ) : filePerc === 100 ? (
+            ) : filePercentage > 0 && filePercentage < 100 ? (
+              <span className='text-slate-700'>{`Uploading ${filePercentage}%`}</span>
+            ) : filePercentage === 100 ? (
               <span className='text-green-700'>Image successfully uploaded!</span>
             ) : (
               ''
             )}
-          </p> */}
+          </p>
 
           <Input
             type='text'
@@ -116,20 +195,20 @@ function Profile() {
             placeholder='email'
             error={emailError}
             {
-              ...register("email", {
-                validate: {
-                  matchPattern: (value) => {
-                    const isValid = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value);
-                    if (isValid) {
-                      setEmailError("");  // Assuming `clearHelperError` is a function to clear the error message
-                    } else {
-                      setEmailError("*Enter Valid Email");
-                    }
-                    return isValid;
+            ...register("email", {
+              validate: {
+                matchPattern: (value) => {
+                  const isValid = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value);
+                  if (isValid) {
+                    setEmailError("");  // Assuming `clearHelperError` is a function to clear the error message
+                  } else {
+                    setEmailError("*Enter Valid Email");
                   }
+                  return isValid;
                 }
-              })
               }
+            })
+            }
           />
           <Input
             type='password'

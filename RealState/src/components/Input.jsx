@@ -8,7 +8,6 @@ const Input = React.forwardRef(
         ...props
     }, ref) {
         const id = useId();
-        console.log(ref);
         return (
             <>
                 <input
