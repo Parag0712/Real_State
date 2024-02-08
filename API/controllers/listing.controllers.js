@@ -50,7 +50,7 @@ export const createListing = async (req, res, next) => {
     }
 };
 
-
+// Get listing
 export const getListings = asyncHandler(async (req, res) => {
     const listing = await Listing.find().populate({
         path: 'userRef',
@@ -66,7 +66,27 @@ export const getListings = asyncHandler(async (req, res) => {
                 "User Listing Fetched Successfully"
             )
         )
+});
+
+export const getListing = asyncHandler(async (req, res) => {
+    const listingId = req.params.id;
+    const listing = await Listing.findOne({ _id: listingId });
+    if (listing == null) {
+        return res.status(400).json({ message: "Data Not found" })
+    }
+
+    return res
+        .status(200)
+        .json(
+            new ApiResponse(200, {
+                Listing: listing
+            },
+                "User Listing Fetched Successfully"
+            )
+        )
+
 })
+// Delete listing
 export const deleteListing = asyncHandler(async (req, res, next) => {
     const listingId = req.params.id;
 
@@ -76,8 +96,8 @@ export const deleteListing = asyncHandler(async (req, res, next) => {
         return res.status(400).json({ message: "Data Not found" })
     }
 
-    const deleteAccount = await Listing.findByIdAndDelete(listingId);
-    if (deleteAccount) {
+    const listingDelete = await Listing.findByIdAndDelete(listingId);
+    if (listingDelete) {
         return res
             .status(200)
             .json(new ApiResponse(200, {}, "Listing Deleted"))
@@ -87,3 +107,39 @@ export const deleteListing = asyncHandler(async (req, res, next) => {
         })
     }
 });
+
+// Edit Listing
+export const editListing = asyncHandler(async (req, res) => {
+
+    const listingId = req.params.id;
+
+    const requiredFields = [
+        "imageUrls", "name", "description", "address", "rent", "sell", "bedrooms", "bathrooms", "regularPrice", "discountPrice", "offer", "parking", "furnished"
+    ];
+
+    const missingFields = requiredFields.filter(field => !(field in req.body) || req.body[field] === undefined || req.body[field] === "");
+
+    // If any required field is missing or empty, return a 400 status with a meaningful error message
+    if (missingFields.length > 0) {
+        return res.status(400).json({
+            message: `Please provide values for the following required fields: ${missingFields.join(", ")}.`
+        });
+    }
+
+    const listing = await Listing.findOne({ _id: listingId });
+    if (listing == null) {
+        return res.status(400).json({ message: "Data Not found" })
+    }    
+
+    const updateListing = await User.findByIdAndUpdate(
+        listing,
+        req.body,
+        { new: true }
+    );
+
+    return res
+        .status(200)
+        .json(
+            new ApiResponse(200, { updateListing }, "Listing details updated successfully")
+        )
+})
