@@ -12,6 +12,7 @@ import { app } from '../Backedend/firebase'
 import { toast } from 'react-toastify'
 import { store } from '../redux/store'
 import persistStore from 'redux-persist/es/persistStore'
+import ListingService from '../Backedend/listing'
 
 function Profile() {
   const dispatch = useDispatch()
@@ -22,9 +23,12 @@ function Profile() {
   const [userNameError, setUserNameError] = useState();
   const [filePercentage, setFilePercentage] = useState(0);
   const [fileUploadError, setFileUploadError] = useState(false);
+  const [showListingsError, setShowListingsError] = useState();
+  const [userListings, setUserListings] = useState([]);
   const navigate = useNavigate();
   const fileRef = useRef(null);
 
+  //Handle File Upload Firestore
   const handleFileUpload = (file) => {
     return new Promise((resolve, reject) => {
       const storage = getStorage(app);
@@ -89,9 +93,33 @@ function Profile() {
   });
 
   // handleShowListings
-  const handleShowListings = () => { }
+  const handleShowListings = () => {
+    AuthService.getUserListing()
+      .then((data) => {
+        const message = data.message;
+        const listing = data.data.Listing;
+        const user = data.data.User;
+        setUserListings(listing);
+      }).catch((error) => {
+        console.log(error);
+      })
+  }
+
   //Handle Listing Delete
-  const handleListingDelete = () => { }
+  const handleListingDelete = (id) => {
+    ListingService.deleteListing(id).then((data) => {
+      toast.success(data.message,{
+        autoClose: 200
+      });
+      setUserListings((prev) =>
+        prev.filter((listing) => listing._id !== id)
+      );
+    }).catch((error)=>{
+      toast.error(error)
+    })
+
+  }
+
   // Handle Logout
   const handleSignOut = () => {
     dispatch(signOutUserStart());
@@ -247,11 +275,6 @@ function Profile() {
             Sign out
           </span>
         </div>
-        {/* 
-        <p className='text-red-700 mt-5'>{error ? error : ''}</p>
-        <p className='text-green-700 mt-5'>
-          {updateSuccess ? 'User is updated successfully!' : ''}
-        </p>
         <button onClick={handleShowListings} className='text-green-700 w-full'>
           Show Listings
         </button>
@@ -296,8 +319,8 @@ function Profile() {
                 </div>
               </div>
             ))}
-          </div> */}
-        {/* )} */}
+          </div>
+        )}
       </div>
     </AnimationContainer>
   )

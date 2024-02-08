@@ -10,7 +10,7 @@ class Listing {
 
 
     // Register Function
-    async createListing({names,description,address,sell,rent,parking,furnished,offer,bedrooms,bathrooms,regularPrice,discountPrice},urls) {
+    async createListing({ names, description, address, sell, rent, parking, furnished, offer, bedrooms, bathrooms, regularPrice, discountPrice }, urls) {
 
         const obj = {
             name: names,
@@ -49,10 +49,20 @@ class Listing {
     }
 
     //Get Current User
-    async getAuthUser(){
+    async getListing() {
         try {
-            const response = await this.api.get('auth/get-user');
+            const response = await this.api.get('/get-listing');
             return response.data;
+        } catch (error) {
+            throw error
+        }
+    }
+
+    //Delete Listing
+    async deleteListing(id) {
+        try {
+            const response = await this.api.delete(`/delete-listing/${id}`);
+            return response.data
         } catch (error) {
             if (error.response.data) {
                 throw error.response.data.message;

@@ -244,7 +244,6 @@ function CreateListing() {
                                 alt={`Listing Image ${index}`}
                                 className='w-20 h-20 object-contain rounded-lg'
                             />
-                            
                             <p>{files[key].name}</p>
                             <div>
                                 <button

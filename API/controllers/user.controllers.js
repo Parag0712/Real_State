@@ -69,4 +69,31 @@ export const deleteAccount = asyncHandler(async (req, res, next) => {
             message: "Internal Server Error"
         })
     }
+});
+
+
+export const getUserListing = asyncHandler(async (req,res)=>{
+    const Listing = await User.find({_id:req.user._id}).populate('listing');
+
+    if(!Listing){
+        return res.status(404).json({
+            message: "You currently have no listings. Please create a listing to proceed."
+        })
+    }
+
+    const {username,email,avatar,_id} = Listing[0];        
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200, {
+            User:{
+                _id,username,email,avatar
+            },
+            Listing:Listing[0].listing
+        },
+            "User Listing Fetched Successfully"
+        )
+    )
 })
+
+

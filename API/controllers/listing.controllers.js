@@ -7,7 +7,7 @@ import asyncHandler from "../utils/asyncHandler.js";
 export const createListing = async (req, res, next) => {
     try {
         const requiredFields = [
-            "imageUrls", "name", "description", "address", "rent","sell", "bedrooms", "bathrooms", "regularPrice", "discountPrice", "offer", "parking", "furnished"
+            "imageUrls", "name", "description", "address", "rent", "sell", "bedrooms", "bathrooms", "regularPrice", "discountPrice", "offer", "parking", "furnished"
         ];
         console.log(req.body);
         const missingFields = requiredFields.filter(field => !(field in req.body) || req.body[field] === undefined || req.body[field] === "");
@@ -51,7 +51,39 @@ export const createListing = async (req, res, next) => {
 };
 
 
+export const getListings = asyncHandler(async (req, res) => {
+    const listing = await Listing.find().populate({
+        path: 'userRef',
+        select: "_id username email avatar"
+    });
 
-const getListings = asyncHandler(async () => {
-
+    return res
+        .status(200)
+        .json(
+            new ApiResponse(200, {
+                Listing: listing
+            },
+                "User Listing Fetched Successfully"
+            )
+        )
 })
+export const deleteListing = asyncHandler(async (req, res, next) => {
+    const listingId = req.params.id;
+
+    const listing = await Listing.findById(listingId);
+
+    if (!listing) {
+        return res.status(400).json({ message: "Data Not found" })
+    }
+
+    const deleteAccount = await Listing.findByIdAndDelete(listingId);
+    if (deleteAccount) {
+        return res
+            .status(200)
+            .json(new ApiResponse(200, {}, "Listing Deleted"))
+    } else {
+        return res.status(409).json({
+            message: "Internal Server Error"
+        })
+    }
+});

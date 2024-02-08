@@ -138,6 +138,15 @@ class Auth {
             }
         }
     }
+
+    async getUserListing(){
+        try {
+            const response = await this.api.get('user/get-user-listing');
+            return response.data;
+        } catch (error) {
+                throw error
+        }
+    }
 }
 
 const AuthService = new Auth();
