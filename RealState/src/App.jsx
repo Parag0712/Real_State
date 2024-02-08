@@ -14,6 +14,7 @@ import { signInSuccess } from './redux/User/userSlice'
 import { motion,AnimatePresence } from 'framer-motion'
 import ProtectedRoute from './components/ProtectedRoute'
 import CreateListing from './pages/CreateListing'
+import UpdateListing from './pages/UpdateListing'
 
 
 function App() {
@@ -51,7 +52,7 @@ function App() {
               <Route element={<ProtectedRoute />}>
                 <Route path='/profile' element={<Profile />}></Route>
                 <Route path='/create-listing' element={<CreateListing />}></Route>
-                <Route path='/update-listing/:listingId' element={<CreateListing />}></Route>
+                <Route path='/update-listing/:listingId' element={<UpdateListing />}></Route>
               </Route>
             </Routes>
           </BrowserRouter>

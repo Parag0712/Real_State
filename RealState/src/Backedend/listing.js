@@ -47,14 +47,68 @@ class Listing {
             }
         }
     }
+    
+    async updateListing({ name, description, address, sell, rent, parking, furnished, offer, bedrooms, bathrooms, regularPrice, discountPrice }, urls,id){
+        const obj = {
+            name: name,
+            description: description,
+            address: address,
+            sell: sell || true,
+            rent: rent,
+            parking: parking,
+            furnished: furnished,
+            offer: offer,
+            bedrooms: bedrooms,
+            bathrooms: bathrooms,
+            regularPrice: regularPrice || 0,
+            discountPrice: discountPrice || 0,
+            imageUrls: urls
+        }
+
+        try {
+            const response = await this.api.patch(`/update-listing/${id}`, {
+                ...obj
+            }, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            return response;
+        } catch (error) {
+            if (error.response.data) {
+                throw error.response.data.message;
+            } else {
+                throw error
+            }
+        }
+    }
 
     //Get Current User
-    async getListing() {
+    async getListings() {
         try {
-            const response = await this.api.get('/get-listing');
+            const response = await this.api.get('/get-listings');
             return response.data;
         } catch (error) {
-            throw error
+            if (error?.response?.data) {
+                throw error.response.data.message;
+            } else {
+                throw error
+            }
+        }
+    }
+
+    //Gte Listing 
+    async getListing(id) {
+        try {
+            const response = await this.api.get(`/get-listing//${id}`);
+            return response.data;
+        } catch (error) {
+            if (error?.response?.data) {
+                throw error.response.data.message;
+            } else {
+                throw error
+            }
         }
     }
 

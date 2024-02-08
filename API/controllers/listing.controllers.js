@@ -131,7 +131,7 @@ export const editListing = asyncHandler(async (req, res) => {
         return res.status(400).json({ message: "Data Not found" })
     }    
 
-    const updateListing = await User.findByIdAndUpdate(
+    const updateListing = await Listing.findByIdAndUpdate(
         listing,
         req.body,
         { new: true }
