@@ -3,8 +3,10 @@ import React, { forwardRef, useId } from 'react'
 const Input = React.forwardRef(
     function Input({
         type = "text",
+        
         placeholder = "PlaceHolder",
         error = "",
+        
         ...props
     }, ref) {
         const id = useId();

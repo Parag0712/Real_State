@@ -25,12 +25,6 @@ function Profile() {
   const navigate = useNavigate();
   const fileRef = useRef(null);
 
-
-  // useEffect(() => {
-  //   if (file) {
-  //     handleFileUpload(file);
-  //   }
-  // }, [file])
   const handleFileUpload = (file) => {
     return new Promise((resolve, reject) => {
       const storage = getStorage(app);
@@ -57,8 +51,6 @@ function Profile() {
 
   //Handle Submit
   const handleUpdate = (data) => {
-
-
     if (file) {
       handleFileUpload(file).then((imgData) => {
         dispatch(updateUserStart());
@@ -113,6 +105,7 @@ function Profile() {
         dispatch(signOutUserFailure(error));
       })
   }
+
 
   // Handle Delete User
   const handleDeleteUser = () => {

@@ -13,6 +13,7 @@ import AuthService from './Backedend/auth'
 import { signInSuccess } from './redux/User/userSlice'
 import { motion,AnimatePresence } from 'framer-motion'
 import ProtectedRoute from './components/ProtectedRoute'
+import CreateListing from './pages/CreateListing'
 
 
 function App() {
@@ -49,6 +50,7 @@ function App() {
               {/* PrivateRoute */}
               <Route element={<ProtectedRoute />}>
                 <Route path='/profile' element={<Profile />}></Route>
+                <Route path='/create-listing' element={<CreateListing />}></Route>
               </Route>
             </Routes>
           </BrowserRouter>

@@ -13,13 +13,11 @@ dotenv.config({
 // Using this function you get userId based on token
 const verifyJWT = asyncHandler(async (req, res, next) => {
     try {
-
         // Get token from cookie
         const token = req.cookies?.accessToken 
         if (!token) {
             return res.status(400).json({message:"Unauthorized request"})
         }
-
         // Decode out Token
         const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
 
