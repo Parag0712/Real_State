@@ -7,6 +7,8 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperCore from 'swiper'
 import { Navigation, Pagination } from 'swiper/modules';
 import 'swiper/css/bundle';
+import { useSelector } from 'react-redux';
+import Contact from '../components/Contact';
 
 function Listing() {
     SwiperCore.use([Navigation])
@@ -16,7 +18,9 @@ function Listing() {
     const [error, setError] = useState("");
     const [copied, setCopied] = useState(false);
     const [contact, setContact] = useState(false);
-
+    const [userId, setUserId] = useState(false);
+    const [user,setUser] = useState(null);
+    const { currentUser } = useSelector((state) => state.user);
     useEffect(() => {
         setLoading(true)
 
@@ -24,8 +28,9 @@ function Listing() {
             .then((data) => {
                 const message = data.message;
                 const listing = data.data.Listing;
-                const user = data.data.User;
-                console.log(listing);
+                const ListingUser = data.data.Listing.userRef;
+                setUser(ListingUser);
+                setUserId(ListingUser._id)
                 setListing(listing);
             }).catch((error) => {
                 console.log(error);
@@ -34,8 +39,6 @@ function Listing() {
                 setLoading(false)
             })
     }, [])
-
-
 
     return (
         <AnimationContainer>
@@ -127,6 +130,15 @@ function Listing() {
                                     {listing.furnished ? 'Furnished' : 'Unfurnished'}
                                 </li>
                             </ul>
+                            {currentUser && userId !== currentUser._id && !contact && (
+                            <button
+                                onClick={() => setContact(true)}
+                                className='bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 p-3'
+                            >
+                                Contact landlord
+                            </button>
+                        )} 
+                            {contact && <Contact user={user} listing={listing} />}
                         </div>
                     </div>
                 )}

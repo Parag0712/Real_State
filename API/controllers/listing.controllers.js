@@ -70,7 +70,10 @@ export const getListings = asyncHandler(async (req, res) => {
 
 export const getListing = asyncHandler(async (req, res) => {
     const listingId = req.params.id;
-    const listing = await Listing.findOne({ _id: listingId });
+    const listing = await Listing.findOne({ _id: listingId }).populate({
+        path: 'userRef',
+        select: "_id username email avatar"
+    });
     if (listing == null) {
         return res.status(400).json({ message: "Data Not found" })
     }
@@ -79,7 +82,7 @@ export const getListing = asyncHandler(async (req, res) => {
         .status(200)
         .json(
             new ApiResponse(200, {
-                Listing: listing
+                Listing: listing,
             },
                 "User Listing Fetched Successfully"
             )
