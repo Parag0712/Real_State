@@ -47,8 +47,8 @@ class Listing {
             }
         }
     }
-    
-    async updateListing({ name, description, address, sell, rent, parking, furnished, offer, bedrooms, bathrooms, regularPrice, discountPrice }, urls,id){
+
+    async updateListing({ name, description, address, sell, rent, parking, furnished, offer, bedrooms, bathrooms, regularPrice, discountPrice }, urls, id) {
         const obj = {
             name: name,
             description: description,
@@ -109,6 +109,31 @@ class Listing {
             } else {
                 throw error
             }
+        }
+    }
+
+
+
+    //Get Current User
+    async getSearchListings({ offer = false, furnished = false, sell = false, rent = false, searchTerm, limit = 9, startIndex = 0, order = 'desc', parking = false }) {
+        try {
+            const response = await this.api.get('/get-search-listings',
+                {
+                    params: {
+                        offer,
+                        furnished,
+                        sell,
+                        rent,
+                        searchTerm,
+                        limit,
+                        startIndex,
+                        order,
+                        parking
+                    }
+                });
+            return response.data;
+        } catch (error) {
+            throw error
         }
     }
 

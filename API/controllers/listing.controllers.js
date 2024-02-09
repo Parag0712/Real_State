@@ -51,7 +51,7 @@ export const createListing = async (req, res, next) => {
 };
 
 // Get listing
-export const getListings = asyncHandler(async (req, res) => {
+export const getAllListings = asyncHandler(async (req, res) => {
     const listing = await Listing.find().populate({
         path: 'userRef',
         select: "_id username email avatar"
@@ -68,6 +68,7 @@ export const getListings = asyncHandler(async (req, res) => {
         )
 });
 
+// Get Single Listing
 export const getListing = asyncHandler(async (req, res) => {
     const listingId = req.params.id;
     const listing = await Listing.findOne({ _id: listingId }).populate({
@@ -87,6 +88,75 @@ export const getListing = asyncHandler(async (req, res) => {
                 "User Listing Fetched Successfully"
             )
         )
+
+})
+
+// Get Filter Listing
+export const getFilterListing = asyncHandler(async (req, res) => {
+    const limit = parseInt(req.query.limit) || 9
+    const startIndex = parseInt(req.query.startIndex) || 0
+
+    let offer = req.query.offer
+    if (offer === undefined || offer == 'false') {
+        offer = { $in: [false, true] }
+    }   
+
+    // Furnished
+    let furnished = req.query.furnished;
+
+    if (furnished === undefined || furnished === 'false') {
+        furnished = { $in: [false, true] };
+    }
+
+    // Parking
+    let parking = req.query.parking;
+
+    if (parking === undefined || parking === 'false') {
+        parking = { $in: [false, true] };
+    }
+
+    // type
+    let rent = req.query.rent;
+
+    if (rent === undefined || rent === 'false') {
+        rent = { $in: [false, true] };
+    }
+
+
+    let sell = req.query.sell;
+
+    if (sell === undefined || sell === 'false') {
+        sell = { $in: [false, true] };
+    }
+
+    const searchTerm = req.query.searchTerm || '';
+
+    const sort = req.query.sort || 'createdAt';
+    const order = req.query.order || 'desc';
+
+    const listing = await Listing.find({
+        name: { $regex: searchTerm, $options: 'i' },
+        parking,
+        rent,
+        furnished,
+        sell,
+        offer
+    })
+        .sort({ [sort]: order })
+        .limit(limit)
+        .skip(startIndex)
+
+
+    return res
+        .status(200)
+        .json(
+            new ApiResponse(200, {
+                Listing: listing,
+            },
+                "Search Fetched Successfully"
+            )
+        )
+
 
 })
 // Delete listing
@@ -132,7 +202,7 @@ export const editListing = asyncHandler(async (req, res) => {
     const listing = await Listing.findOne({ _id: listingId });
     if (listing == null) {
         return res.status(400).json({ message: "Data Not found" })
-    }    
+    }
 
     const updateListing = await Listing.findByIdAndUpdate(
         listing,
