@@ -5,6 +5,8 @@ import ListingService from '../Backedend/listing';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
 import { app } from '../Backedend/firebase'
 import { toast } from 'react-toastify';
+import AnimationContainer from '../components/AnimationContainer';
+import { useNavigate } from 'react-router-dom';
 
 function CreateListing() {
     const { register, handleSubmit, watch, formState: { errors } } = useForm(
@@ -16,7 +18,7 @@ function CreateListing() {
     const [files, setFiles] = useState();
     const [loading, setLoading] = useState(false);
     const images = watch("images");
-
+    const navigate = useNavigate()
     // Handle Remove Image
     const handleRemoveImage = (indexToRemove) => {
         // Remove the image from the files state
@@ -73,6 +75,9 @@ function CreateListing() {
         Promise.all(promise).then((urls) => {
             ListingService.createListing(data, urls).then((value) => {
                 toast.success(value.data.message)
+                const id = value.data.data.listingPost._id
+                console.log();
+                navigate(`/listing/${id}`)
             }).catch((error) => {
                 toast.error(error);
             }).finally(() => {
@@ -82,6 +87,7 @@ function CreateListing() {
     }
 
     return (
+        <AnimationContainer>
         <main className='p-3 max-w-4xl mx-auto'>
             <h1 className='text-3xl font-semibold text-center my-7'>
                 Create a Listing
@@ -269,6 +275,7 @@ function CreateListing() {
                 </div>
             </form>
         </main>
+        </AnimationContainer>
     )
 }
 

@@ -22,7 +22,8 @@
     "react-router-dom": "^6.22.0",
     "react-toastify": "^10.0.4",
     "RealStateProject": "file:..",
-    "redux-persist": "^6.0.0"
+    "redux-persist": "^6.0.0",
+    "swiper": "^11.0.6"
   },
   "devDependencies": {
     "@types/react": "^18.2.43",

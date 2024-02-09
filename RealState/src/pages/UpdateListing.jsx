@@ -6,6 +6,7 @@ import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/
 import { app } from '../Backedend/firebase'
 import { toast } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
+import AnimationContainer from '../components/AnimationContainer';
 function UpdateListing() {
 
     const [files, setFiles] = useState();
@@ -102,7 +103,7 @@ function UpdateListing() {
                 setLoading(true);
                 promise.push(storeImage(files[index]));
             }
-
+            
             Promise.all(promise).then((urls) => {
                 ListingService.updateListing(data, urls, listingId).then((value) => {
                     toast.success(value.data.message)
@@ -126,6 +127,7 @@ function UpdateListing() {
     }
 
     return (
+        <AnimationContainer>
         <main className='p-3 max-w-4xl mx-auto'>
             <h1 className='text-3xl font-semibold text-center my-7'>
                 Edit a Listing
@@ -334,6 +336,7 @@ function UpdateListing() {
                 </div>
             </form>
         </main>
+        </AnimationContainer>
     )
 }
 
