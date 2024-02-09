@@ -16,6 +16,7 @@ import ProtectedRoute from './components/ProtectedRoute'
 import CreateListing from './pages/CreateListing'
 import UpdateListing from './pages/UpdateListing'
 import Listing from './pages/Listing'
+import Search from './components/Search'
 
 
 function App() {
@@ -50,6 +51,7 @@ function App() {
               <Route path='/sign-up' element={<SignUp />}></Route>
               <Route path='/about' element={<About />}></Route>
               <Route path='/listing/:listingId' element={<Listing />} />
+              <Route path='/search' element={<Search />} />
               {/* PrivateRoute */}
               <Route element={<ProtectedRoute />}>
                 <Route path='/profile' element={<Profile />}></Route>

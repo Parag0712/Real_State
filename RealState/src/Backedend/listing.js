@@ -115,20 +115,20 @@ class Listing {
 
 
     //Get Current User
-    async getSearchListings({ offer = false, furnished = false, sell = false, rent = false, searchTerm, limit = 9, startIndex = 0, order = 'desc', parking = false }) {
+    async getSearchListings({ offer, furnished , sell, rent, searchTerm, limit, startIndex, order, parking }) {
         try {
             const response = await this.api.get('/get-search-listings',
                 {
                     params: {
-                        offer,
-                        furnished,
-                        sell,
-                        rent,
-                        searchTerm,
-                        limit,
-                        startIndex,
-                        order,
-                        parking
+                        offer:offer || false,
+                        furnished:furnished || false,
+                        sell:sell || false,
+                        rent:rent || false,
+                        searchTerm:searchTerm || '',
+                        limit:limit ||9,
+                        startIndex:startIndex || 0,
+                        order: 'desc' || order,
+                        parking:parking || false
                     }
                 });
             return response.data;

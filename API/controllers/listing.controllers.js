@@ -97,35 +97,35 @@ export const getFilterListing = asyncHandler(async (req, res) => {
     const startIndex = parseInt(req.query.startIndex) || 0
 
     let offer = req.query.offer
-    if (offer === undefined || offer == 'false') {
+    if (offer === undefined || offer == false) {
         offer = { $in: [false, true] }
     }   
 
     // Furnished
     let furnished = req.query.furnished;
 
-    if (furnished === undefined || furnished === 'false') {
+    if (furnished === undefined || furnished === false) {
         furnished = { $in: [false, true] };
     }
 
     // Parking
     let parking = req.query.parking;
 
-    if (parking === undefined || parking === 'false') {
+    if (parking === undefined || parking === false) {
         parking = { $in: [false, true] };
     }
 
     // type
     let rent = req.query.rent;
 
-    if (rent === undefined || rent === 'false') {
+    if (rent === undefined || rent === false) {
         rent = { $in: [false, true] };
     }
 
 
     let sell = req.query.sell;
 
-    if (sell === undefined || sell === 'false') {
+    if (sell === undefined || sell === false) {
         sell = { $in: [false, true] };
     }
 
@@ -134,6 +134,8 @@ export const getFilterListing = asyncHandler(async (req, res) => {
     const sort = req.query.sort || 'createdAt';
     const order = req.query.order || 'desc';
 
+
+    console.log();
     const listing = await Listing.find({
         name: { $regex: searchTerm, $options: 'i' },
         parking,
