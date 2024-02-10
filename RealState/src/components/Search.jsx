@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ListingService from '../Backedend/listing';
 import ListingItem from './ListingItem';
 
@@ -6,18 +6,53 @@ function Search() {
   const [sidebardata, setSidebardata] = useState({
     searchTerm: '',
     rent: true,
-    sell:true,
+    sell: true,
     parking: false,
     furnished: false,
     offer: false,
-    sort: 'created_at',
+    sort: 'createdAt',
     order: 'desc',
+    startIndex: 0
   });
 
   const [loading, setLoading] = useState(false);
   const [listings, setListings] = useState([]);
   const [showMore, setShowMore] = useState(false);
 
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    const searchTermFromUrl = urlParams.get('searchTerm');
+    const rentFromUrl = true;
+    const sellFromUrl = urlParams.get('sell');
+    const parkingFromUrl = urlParams.get('parking');
+    const furnishedFromUrl = urlParams.get('furnished');
+    const offerFromUrl = urlParams.get('offer');
+    const sortFromUrl = urlParams.get('sort');
+    const orderFromUrl = urlParams.get('order');
+
+    if (
+      searchTermFromUrl ||
+      sellFromUrl ||
+      rentFromUrl ||
+      parkingFromUrl ||
+      furnishedFromUrl ||
+      offerFromUrl ||
+      sortFromUrl ||
+      orderFromUrl
+    ) {
+      setSidebardata({
+        searchTerm: searchTermFromUrl || '',
+        rent: rentFromUrl === 'true' ? true : true,
+        sell: sellFromUrl === 'true' ? true : true,
+        parking: parkingFromUrl === 'true' ? true : false,
+        furnished: furnishedFromUrl === 'true' ? true : false,
+        offer: offerFromUrl === 'true' ? true : false,
+        sort: sortFromUrl || 'createdAt',
+        order: orderFromUrl || 'desc',
+      });
+    }
+  }, [])
 
   // handle change
   const handleChange = (e) => {
@@ -40,21 +75,49 @@ function Search() {
     }
 
     if (e.target.id === 'sort_order') {
-      const sort = e.target.value.split('_')[0] || 'created_at';
+      const sort = e.target.value.split('_')[0] || 'createdAt';
       const order = e.target.value.split('_')[1] || 'desc';
       setSidebardata({ ...sidebardata, sort, order });
     }
   }
+  console.log(sidebardata);
+
+  const onShowMoreClick = () => {
+    const numberOflisting = listings.length;
+    const startIndex = numberOflisting;
+    setSidebardata(prevState => ({
+      ...prevState,
+      startIndex: startIndex
+    }));
+
+    // Get Search Service for showMore
+    ListingService.getSearchListings(sidebardata)
+    .then((data)=>{
+      const listing = data.data.Listing;
+      if (listing.length < 9) {
+        setShowMore(false);
+      }
+      setListings([...listings, ...listing]);
+    }).catch((error)=>{
+      console.log(error);
+    })
+  }
 
   //handle submit 
-  const handleSubmit = (e)=>{
+  const handleSubmit = (e) => {
     e.preventDefault();
+    setShowMore(false)
 
-    ListingService.getSearchListings(sidebardata).then((data)=>{
+    // Get Search Service when click search
+    ListingService.getSearchListings(sidebardata).then((data) => {
       const listing = data.data.Listing;
-      console.log(listing);
+      if(listing.length>8){
+        setShowMore(false)
+      }else{
+        setShowMore(false)
+      }
       setListings(listing)
-    }).catch((error)=>{
+    }).catch((error) => {
       console.log(error);
     })
   }
@@ -79,7 +142,7 @@ function Search() {
             </div>
             <div className='flex gap-2 flex-wrap items-center'>
               <label className='font-semibold'>Type:</label>
-              
+
               <div className='flex gap-2'>
                 <input
                   type='checkbox'
@@ -90,7 +153,7 @@ function Search() {
                 />
                 <span>Rent</span>
               </div>
-              
+
               <div className='flex gap-2'>
                 <input
                   type='checkbox'
@@ -139,7 +202,7 @@ function Search() {
               <label className='font-semibold'>Sort:</label>
               <select
                 onChange={handleChange}
-                defaultValue={'created_at_desc'}
+                defaultValue={'createdAt_desc'}
                 id='sort_order'
                 className='border rounded-lg p-3'
               >
@@ -153,7 +216,7 @@ function Search() {
               Search
             </button>
           </form>
-        </div>        
+        </div>
         <div className='flex-1'>
           <h1 className='text-3xl font-semibold border-b p-3 text-slate-700 mt-5'>
             Listing results:
@@ -171,20 +234,20 @@ function Search() {
             {!loading &&
               listings &&
               listings.map((listing) => (
-                <ListingItem  
-                key={listing._id} 
-                id={listing._id}
+                <ListingItem
+                  key={listing._id}
+                  id={listing._id}
 
-                
-                img={listing.imageUrls[0]}
-                name={listing.name} 
-                address={listing.address} 
-                description={listing.description} 
-                offer={listing.offer} 
-                discountPrice={listing.discountPrice} 
-                regularPrice={listing.regularPrice} 
-                bedrooms={listing.bedrooms}
-                bathrooms={listing.bathrooms}
+
+                  img={listing.imageUrls[0]}
+                  name={listing.name}
+                  address={listing.address}
+                  description={listing.description}
+                  offer={listing.offer}
+                  discountPrice={listing.discountPrice}
+                  regularPrice={listing.regularPrice}
+                  bedrooms={listing.bedrooms}
+                  bathrooms={listing.bathrooms}
                 />
 
               ))}
