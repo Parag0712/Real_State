@@ -34,6 +34,7 @@ function ListingPage() {
                 setListing(listing);
             }).catch((error) => {
                 console.log(error);
+                console.log(error);
                 setError(error)
             }).finally(() => {
                 setLoading(false)
@@ -43,7 +44,6 @@ function ListingPage() {
     return (
         <AnimationContainer>
             <main>
-                {/* {loading && <p className='text-center my-7 text-2xl'>Loading...</p>} */}
                 {error && (
                     <p className='text-center my-7 text-2xl'>Something went wrong!</p>
                 )}
