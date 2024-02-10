@@ -6,7 +6,7 @@ function Search() {
   const [sidebardata, setSidebardata] = useState({
     searchTerm: '',
     rent: true,
-    sell: true,
+    sell: false,
     parking: false,
     furnished: false,
     offer: false,
@@ -43,8 +43,8 @@ function Search() {
     ) {
       setSidebardata({
         searchTerm: searchTermFromUrl || '',
-        rent: rentFromUrl === 'true' ? true : true,
-        sell: sellFromUrl === 'true' ? true : true,
+        rent: rentFromUrl === 'true' ? true : false,
+        sell: sellFromUrl === 'true' ? true : false,
         parking: parkingFromUrl === 'true' ? true : false,
         furnished: furnishedFromUrl === 'true' ? true : false,
         offer: offerFromUrl === 'true' ? true : false,
@@ -83,24 +83,21 @@ function Search() {
   console.log(sidebardata);
 
   const onShowMoreClick = () => {
-    const numberOflisting = listings.length;
-    const startIndex = numberOflisting;
-    setSidebardata(prevState => ({
-      ...prevState,
-      startIndex: startIndex
-    }));
+    const numberOfListing = listings.length;
+    console.log(numberOfListing);
+    const startIndex = numberOfListing;
 
     // Get Search Service for showMore
-    ListingService.getSearchListings(sidebardata)
-    .then((data)=>{
-      const listing = data.data.Listing;
-      if (listing.length < 9) {
-        setShowMore(false);
-      }
-      setListings([...listings, ...listing]);
-    }).catch((error)=>{
-      console.log(error);
-    })
+    ListingService.getSearchListings(sidebardata, startIndex)
+      .then((data) => {
+        const listing = data.data.Listing;
+        if (listing.length < 9) {
+          setShowMore(false);
+        }
+        setListings([...listings, ...listing]);
+      }).catch((error) => {
+        console.log(error);
+      })
   }
 
   //handle submit 
@@ -108,12 +105,13 @@ function Search() {
     e.preventDefault();
     setShowMore(false)
 
+
     // Get Search Service when click search
     ListingService.getSearchListings(sidebardata).then((data) => {
       const listing = data.data.Listing;
-      if(listing.length>8){
-        setShowMore(false)
-      }else{
+      if (listing.length > 8) {
+        setShowMore(true)
+      } else {
         setShowMore(false)
       }
       setListings(listing)
@@ -237,8 +235,6 @@ function Search() {
                 <ListingItem
                   key={listing._id}
                   id={listing._id}
-
-
                   img={listing.imageUrls[0]}
                   name={listing.name}
                   address={listing.address}
@@ -248,6 +244,8 @@ function Search() {
                   regularPrice={listing.regularPrice}
                   bedrooms={listing.bedrooms}
                   bathrooms={listing.bathrooms}
+                  rent={listing.rent}
+                  sell={listing.sell}
                 />
 
               ))}

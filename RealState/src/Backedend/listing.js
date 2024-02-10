@@ -115,7 +115,8 @@ class Listing {
 
 
     //Get Current User
-    async getSearchListings({ offer, sort,furnished, sell, rent, searchTerm, limit, startIndex, order, parking }) {
+    async getSearchListings({ offer, sort,furnished, sell, rent, searchTerm, limit, order, parking },startIndex) {
+        console.log(startIndex);
         try {
             const response = await this.api.get('/get-search-listings',
                 {

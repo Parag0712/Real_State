@@ -4,11 +4,12 @@ import { useEffect, useState } from 'react';
 import ListingService from '../Backedend/listing';
 
 export default function ListingItem({id,img, name, address, description, offer, discountPrice, regularPrice, rent, bedrooms,bathrooms}) {
+    console.log(rent);
     return (
         <div className='bg-white shadow-md hover:shadow-lg transition-shadow overflow-hidden rounded-lg w-full sm:w-[330px]'>
             <Link to={`/listing/${id}`}>
                 <img
-                    src={img}
+                    src={img || 'https://images.unsplash.com/photo-1582407947304-fd86f028f716?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cmVhbCUyMGVzdGF0ZXxlbnwwfHwwfHx8MA%3D%3D'}
                     alt='listing cover'
                     className='h-[320px] sm:h-[220px] w-full object-cover hover:scale-105 transition-scale duration-300'
                 />

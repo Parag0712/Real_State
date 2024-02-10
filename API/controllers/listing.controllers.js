@@ -9,7 +9,6 @@ export const createListing = async (req, res, next) => {
         const requiredFields = [
             "imageUrls", "name", "description", "address", "rent", "sell", "bedrooms", "bathrooms", "regularPrice", "discountPrice", "offer", "parking", "furnished"
         ];
-        console.log(req.body);
         const missingFields = requiredFields.filter(field => !(field in req.body) || req.body[field] === undefined || req.body[field] === "");
 
         // If any required field is missing or empty, return a 400 status with a meaningful error message
@@ -96,10 +95,11 @@ export const getFilterListing = asyncHandler(async (req, res) => {
     const limit = parseInt(req.query.limit) || 9
     const startIndex = parseInt(req.query.startIndex) || 0
 
+
     let offer = req.query.offer
     if (offer === undefined || offer == false) {
         offer = { $in: [false, true] }
-    }   
+    }
 
     // Furnished
     let furnished = req.query.furnished;
@@ -135,13 +135,14 @@ export const getFilterListing = asyncHandler(async (req, res) => {
     const order = req.query.order || 'desc';
 
 
-    console.log();
     const listing = await Listing.find({
         name: { $regex: searchTerm, $options: 'i' },
         parking,
-        rent,
         furnished,
-        sell,
+        $or: [
+            { rent: { $exists: rent } },
+            { sell: { $exists: sell } }
+        ],
         offer
     })
         .sort({ [sort]: order })
