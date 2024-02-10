@@ -16,7 +16,7 @@ import CreateListing from './pages/CreateListing'
 import UpdateListing from './pages/UpdateListing'
 import Search from './components/Search'
 import Loading from './components/Loading'
-import Listing from './pages/Listing'
+import ListingPage from './pages/ListingPage'
 
 
 function App() {
@@ -59,7 +59,7 @@ function App() {
             <Route path='/sign-in' element={<SignIn />}></Route>
             <Route path='/sign-up' element={<SignUp />}></Route>
             <Route path='/about' element={<About />}></Route>
-            <Route path='/listing/:listingId' element={<Listing />} />
+            <Route path='/listing/:listingId' element={<ListingPage />} />
             <Route path='/search' element={<Search />} />
             {/* PrivateRoute */}
             <Route element={<ProtectedRoute />}>
