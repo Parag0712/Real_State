@@ -13,7 +13,7 @@ class Auth {
     // Register Function
     async createAccount({ username, email, password }) {
         try {
-            const response = await this.api.post('/register', {
+            const response = await this.api.post('auth/register', {
                 email,
                 username,
                 password
