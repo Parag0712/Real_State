@@ -84,7 +84,6 @@ function Search() {
 
   const onShowMoreClick = () => {
     const numberOfListing = listings.length;
-    console.log(numberOfListing);
     const startIndex = numberOfListing;
 
     // Get Search Service for showMore

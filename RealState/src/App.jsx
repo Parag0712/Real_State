@@ -10,24 +10,25 @@ import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import { useDispatch, useSelector } from 'react-redux'
 import AuthService from './Backedend/auth'
-import { signInSuccess } from './redux/User/userSlice'
+import { signInFailure, signInStart, signInSuccess } from './redux/User/userSlice'
 import { motion,AnimatePresence } from 'framer-motion'
 import ProtectedRoute from './components/ProtectedRoute'
 import CreateListing from './pages/CreateListing'
 import UpdateListing from './pages/UpdateListing'
 import Listing from './pages/Listing'
 import Search from './components/Search'
+import Loading from './components/Loading'
 
 
 function App() {
 
-  const { currentUser } = useSelector((state) => state.user);
+  const { currentUser,loading } = useSelector((state) => state.user);
   // console.log(currentUser ? currentUser : "");
   const dispatch = useDispatch();
-
   
   // UseEffect 
   useEffect(() => {
+    dispatch(signInStart());
     AuthService.getAuthUser()
       .then((val) => {
         const userData = val.data.user
@@ -35,13 +36,17 @@ function App() {
         // Store You Data In Redux
         // console.log(userData);
       }).catch((error) => {
+    dispatch(signInFailure());
         // console.log(error);
       })
   }, [])
 
+
   return (
     <>
-          <BrowserRouter>
+      {loading && <Loading></Loading>}
+      <div className={`${loading == true?'hidden':''}`}>
+      <BrowserRouter >
             {/* Same as */}
             <Header />
             <ToastContainer />
@@ -60,6 +65,7 @@ function App() {
               </Route>
             </Routes>
           </BrowserRouter>
+      </div>
     </>
   )
 }

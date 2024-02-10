@@ -10,8 +10,8 @@ import 'swiper/css/bundle';
 import { useSelector } from 'react-redux';
 import Contact from '../components/Contact';
 
-function Listing() {
-    SwiperCore.use([Navigation])
+    function Listing() {
+        SwiperCore.use([Navigation])
     const { listingId } = useParams();
     const [listing, setListing] = useState(null);
     const [loading, setLoading] = useState(false);
