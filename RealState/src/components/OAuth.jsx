@@ -20,7 +20,9 @@ function OAuth() {
             const result = await signInWithPopup(auth, provider);
             console.log(result.user);
             AuthService.googleAuth({ username: result.user.displayName, email: result.user.email, avatar: result.user.photoURL }).then((data) => {
-                const userData = data.data.user
+                const refreshToken = data.data.refreshToken;
+                const accessToken = data.data.accessToken;
+                const userData = { ...data.data.user, refreshToken, accessToken };
                 toast.success(data.message)
                 dispatch(signInSuccess(userData));
                 navigate('/')

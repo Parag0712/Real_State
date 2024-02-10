@@ -22,8 +22,9 @@ function SignIn() {
     dispatch(signInStart());
     AuthService.login(data)
       .then((val) => {
-        const accessToken = val.data.accessToken;
-        const userData = val.data.user
+        const refreshToken = data.data.refreshToken;
+        const accessToken = data.data.accessToken;
+        const userData = { ...data.data.user, refreshToken, accessToken };
         dispatch(signInSuccess(userData));
         toast.success(val.message)
         navigate('/')

@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import ListingService from '../Backedend/listing';
 
 export default function ListingItem({id,img, name, address, description, offer, discountPrice, regularPrice, rent, bedrooms,bathrooms}) {
-    console.log(rent);
     return (
         <div className='bg-white shadow-md hover:shadow-lg transition-shadow overflow-hidden rounded-lg w-full sm:w-[330px]'>
             <Link to={`/listing/${id}`}>

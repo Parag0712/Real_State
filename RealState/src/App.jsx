@@ -28,6 +28,13 @@ function App() {
   
   // UseEffect 
   useEffect(() => {
+    if(currentUser){
+      console.log(currentUser);
+    }
+
+
+
+
     dispatch(signInStart());
     AuthService.getAuthUser()
       .then((val) => {
