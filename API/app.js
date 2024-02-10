@@ -2,6 +2,10 @@ import express from 'express'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import path from 'path';
+
+const __dirname = path.resolve();
+
+
 const app = express();
 
 // Cors 
@@ -37,6 +41,8 @@ app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/listing", listingRouter);
 // Export App
+
+
 
 
 app.use(express.static(path.join(__dirname, '/RealState/dist')));
