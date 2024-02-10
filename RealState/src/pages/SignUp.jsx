@@ -4,7 +4,7 @@ import OAuth from '../components/OAuth'
 import { useForm } from 'react-hook-form'
 import { useState } from 'react';
 import Input from '../components/Input';
-import AuthService from '../Backedend/auth';
+import AuthService from '../Backend/auth';
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { signInFailure, signInStart, signInSuccess } from '../redux/User/userSlice';

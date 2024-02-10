@@ -1,6 +1,6 @@
 import React, { useEffect, useId, useState } from 'react'
 import AnimationContainer from '../components/AnimationContainer'
-import ListingService from '../Backedend/listing'
+import ListingService from '../Backend/listing'
 import { Link } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperCore from 'swiper'

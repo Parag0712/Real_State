@@ -1,7 +1,7 @@
 import React from 'react'
 import { GoogleAuthProvider, getAuth, signInWithPopup } from 'firebase/auth'
-import { app } from '../Backedend/firebase';
-import AuthService from '../Backedend/auth';
+import { app } from '../Backend/firebase';
+import AuthService from '../Backend/auth';
 import { useDispatch } from 'react-redux';
 import { signInFailure, signInStart, signInSuccess } from '../redux/User/userSlice';
 import { toast } from 'react-toastify';

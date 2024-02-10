@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import ListingService from '../Backedend/listing';
+import ListingService from '../Backend/listing';
 import ListingItem from './ListingItem';
 
 function Search() {

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import AuthService from '../Backedend/auth'
+import AuthService from '../Backend/auth'
 import { useDispatch, useSelector } from 'react-redux'
 import { signOutUserFailure, signOutUserStart, signOutUserSuccess, updateUserFailure, updateUserStart, updateUserSuccess } from '../redux/User/userSlice'
 import AnimationContainer from '../components/AnimationContainer'
@@ -8,11 +8,11 @@ import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/
 import { Link, useNavigate } from 'react-router-dom'
 import Input from '../components/Input'
 import { useForm } from 'react-hook-form'
-import { app } from '../Backedend/firebase'
+import { app } from '../Backend/firebase'
 import { toast } from 'react-toastify'
 import { store } from '../redux/store'
 import persistStore from 'redux-persist/es/persistStore'
-import ListingService from '../Backedend/listing'
+import ListingService from '../Backend/listing'
 
 function Profile() {
   const dispatch = useDispatch()

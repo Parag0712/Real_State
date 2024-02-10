@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import Input from '../components/Input'
 import { useForm } from 'react-hook-form'
-import ListingService from '../Backedend/listing';
+import ListingService from '../Backend/listing';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
-import { app } from '../Backedend/firebase'
+import { app } from '../Backend/firebase'
 import { toast } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
 import AnimationContainer from '../components/AnimationContainer';

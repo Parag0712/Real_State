@@ -9,15 +9,14 @@ import Header from './components/Header'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import { useDispatch, useSelector } from 'react-redux'
-import AuthService from './Backedend/auth'
+import AuthService from './Backend/auth'
 import { signInFailure, signInStart, signInSuccess } from './redux/User/userSlice'
-import { motion, AnimatePresence } from 'framer-motion'
 import ProtectedRoute from './components/ProtectedRoute'
 import CreateListing from './pages/CreateListing'
 import UpdateListing from './pages/UpdateListing'
-import Listing from './pages/Listing'
 import Search from './components/Search'
 import Loading from './components/Loading'
+import Listing from './pages/Listing'
 
 
 function App() {

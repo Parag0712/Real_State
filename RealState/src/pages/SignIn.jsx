@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import { Link, NavLink, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import OAuth from '../components/OAuth'
 import { useForm } from 'react-hook-form'
 import Input from '../components/Input';
-import AuthService from '../Backedend/auth.js'
+import AuthService from '../Backend/auth.js'
 import { toast } from 'react-toastify';
 import { signInFailure, signInStart, signInSuccess } from '../redux/User/userSlice.js';
 import { useDispatch, useSelector } from 'react-redux';

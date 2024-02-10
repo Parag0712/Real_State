@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import ListingService from '../Backedend/listing';
+import ListingService from '../Backend/listing';
 import { useParams } from 'react-router-dom';
 import { FaBath, FaBed, FaChair, FaMapMarkerAlt, FaParking, FaShare } from 'react-icons/fa';
 import AnimationContainer from '../components/AnimationContainer';
@@ -10,8 +10,8 @@ import 'swiper/css/bundle';
 import { useSelector } from 'react-redux';
 import Contact from '../components/Contact';
 
-    function Listing() {
-        SwiperCore.use([Navigation])
+function Listing() {
+    SwiperCore.use([Navigation])
     const { listingId } = useParams();
     const [listing, setListing] = useState(null);
     const [loading, setLoading] = useState(false);

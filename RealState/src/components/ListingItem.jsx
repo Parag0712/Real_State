@@ -1,7 +1,7 @@
 import { Link, useParams } from 'react-router-dom';
 import { MdLocationOn } from 'react-icons/md';
 import { useEffect, useState } from 'react';
-import ListingService from '../Backedend/listing';
+import ListingService from '../Backend/listing';
 
 export default function ListingItem({id,img, name, address, description, offer, discountPrice, regularPrice, rent, bedrooms,bathrooms}) {
     return (
