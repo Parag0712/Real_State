@@ -53,15 +53,13 @@ function ListingPage() {
                             clickable: true,
                             dynamicBullets: true,
                         }} navigation modules={[Pagination]} >
-                            {listing.imageUrls.map((url) => (
+                            {listing.imageUrls.map((url,index) => (
                                 <SwiperSlide key={url}>
-                                    <div
-                                        className='h-[550px]'
-                                        style={{
-                                            background: `url(${url}) center no-repeat`,
-                                            backgroundSize: 'cover',
-                                        }}
-                                    ></div>
+                                     <img
+                                        src={url}
+                                        alt={`Slide ${index}`}
+                                        className='h-[550px] w-full object-cover object-center'
+                                    />                                    
                                 </SwiperSlide>
                             ))}
                         </Swiper>

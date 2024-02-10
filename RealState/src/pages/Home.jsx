@@ -27,11 +27,11 @@ function Home() {
     // Assuming createdAt is a date field, compare them in descending order
     return new Date(b.createdAt) - new Date(a.createdAt);
   }).slice(0, maxListings);
-  
+
   const rentListings = listing.filter(listing => listing.rent === true).slice(0, maxListings);
   const sellListings = listing.filter(listing => listing.sell === true).slice(0, maxListings);
 
-  
+
   return (
     <AnimationContainer>
       <div>
@@ -63,16 +63,13 @@ function Home() {
         }} navigation modules={[Pagination]}>
           {listing &&
             listing.length > 0 &&
-            listing.map((listing,index) => (
+            listing.map((listing, index) => (
               <SwiperSlide key={index}>
-                <div 
-                  style={{
-                    background: `url(${listing.imageUrls[0]}) center no-repeat`,
-                    backgroundSize: 'cover',
-                  }}
-                  className='h-[500px]'
-                  key={listing._id}
-                ></div>
+                <img
+                  src={listing.imageUrls[0]}
+                  alt={`Slide ${index}`}
+                  className='h-[500px] w-full object-cover object-center'
+                />
               </SwiperSlide>
             ))}
         </Swiper>
@@ -87,7 +84,7 @@ function Home() {
                 <Link className='text-sm text-blue-800 hover:underline' to={'/search?offer=true'}>Show more offers</Link>
               </div>
               <div className='flex flex-wrap gap-4'>
-                {sortedListings.map((listing,index) => (
+                {sortedListings.map((listing, index) => (
                   <ListingItem
                     key={index}
                     id={listing._id}
@@ -114,7 +111,7 @@ function Home() {
                 <Link className='text-sm text-blue-800 hover:underline' to={'/search?type=rent'}>Show more places for rent</Link>
               </div>
               <div className='flex flex-wrap gap-4'>
-              {rentListings.map((listing,index) => (
+                {rentListings.map((listing, index) => (
                   <ListingItem
                     key={listing._id}
                     id={listing._id}
@@ -141,7 +138,7 @@ function Home() {
                 <Link className='text-sm text-blue-800 hover:underline' to={'/search?type=sale'}>Show more places for sale</Link>
               </div>
               <div className='flex flex-wrap gap-4'>
-              {sellListings.map((listing,index) => (
+                {sellListings.map((listing, index) => (
                   <ListingItem
                     key={listing._id}
                     id={listing._id}
