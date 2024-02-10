@@ -21,7 +21,7 @@ const verifyJWT = asyncHandler(async (req, res, next) => {
         // Decode out Token
         const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
 
-        const user = await User.findById(decodedToken?._id).select("-password -refreshToken");
+        const user = await User.findById(decodedToken?._id).select("-password ");
 
         if (!user) { return res.status(400).json({message:"Invalid Access Token"}) }
 

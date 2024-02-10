@@ -34,7 +34,6 @@ function SignUp() {
         const userData = { ...data.data.user, refreshToken, accessToken };
 
         dispatch(signInSuccess(userData));
-        console.log(val.data.mes);
         toast.success(val.message)
         navigate('/')
       }).catch((error) => {

@@ -11,7 +11,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useDispatch, useSelector } from 'react-redux'
 import AuthService from './Backedend/auth'
 import { signInFailure, signInStart, signInSuccess } from './redux/User/userSlice'
-import { motion,AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import ProtectedRoute from './components/ProtectedRoute'
 import CreateListing from './pages/CreateListing'
 import UpdateListing from './pages/UpdateListing'
@@ -22,29 +22,27 @@ import Loading from './components/Loading'
 
 function App() {
 
-  const { currentUser,loading } = useSelector((state) => state.user);
-  // console.log(currentUser ? currentUser : "");
+  const { currentUser, loading } = useSelector((state) => state.user);
   const dispatch = useDispatch();
-  
+
   // UseEffect 
   useEffect(() => {
-    if(currentUser){
-      console.log(currentUser);
+    if (currentUser) {
+      AuthService.refreshToken(currentUser?.refreshToken).then((data) => {
+      }).catch((error) => {
+        console.log(error);
+      })
     }
-
-
 
 
     dispatch(signInStart());
     AuthService.getAuthUser()
       .then((val) => {
-        const userData = val.data.user
+        const refreshToken = val.data.refreshToken;
+        const userData = { ...val.data.user, refreshToken, accessToken };
         dispatch(signInSuccess(userData));
-        // Store You Data In Redux
-        // console.log(userData);
       }).catch((error) => {
-    dispatch(signInFailure());
-        // console.log(error);
+        dispatch(signInFailure());
       })
   }, [])
 
@@ -52,26 +50,26 @@ function App() {
   return (
     <>
       {loading && <Loading></Loading>}
-      <div className={`${loading == true?'hidden':''}`}>
-      <BrowserRouter >
-            {/* Same as */}
-            <Header />
-            <ToastContainer />
-            <Routes>
-              <Route path='/' element={<Home />}></Route>
-              <Route path='/sign-in' element={<SignIn />}></Route>
-              <Route path='/sign-up' element={<SignUp />}></Route>
-              <Route path='/about' element={<About />}></Route>
-              <Route path='/listing/:listingId' element={<Listing />} />
-              <Route path='/search' element={<Search />} />
-              {/* PrivateRoute */}
-              <Route element={<ProtectedRoute />}>
-                <Route path='/profile' element={<Profile />}></Route>
-                <Route path='/create-listing' element={<CreateListing />}></Route>
-                <Route path='/update-listing/:listingId' element={<UpdateListing />}></Route>
-              </Route>
-            </Routes>
-          </BrowserRouter>
+      <div className={`${loading == true ? 'hidden' : ''}`}>
+        <BrowserRouter >
+          {/* Same as */}
+          <Header />
+          <ToastContainer />
+          <Routes>
+            <Route path='/' element={<Home />}></Route>
+            <Route path='/sign-in' element={<SignIn />}></Route>
+            <Route path='/sign-up' element={<SignUp />}></Route>
+            <Route path='/about' element={<About />}></Route>
+            <Route path='/listing/:listingId' element={<Listing />} />
+            <Route path='/search' element={<Search />} />
+            {/* PrivateRoute */}
+            <Route element={<ProtectedRoute />}>
+              <Route path='/profile' element={<Profile />}></Route>
+              <Route path='/create-listing' element={<CreateListing />}></Route>
+              <Route path='/update-listing/:listingId' element={<UpdateListing />}></Route>
+            </Route>
+          </Routes>
+        </BrowserRouter>
       </div>
     </>
   )

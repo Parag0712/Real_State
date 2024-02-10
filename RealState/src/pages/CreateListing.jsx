@@ -76,7 +76,6 @@ function CreateListing() {
             ListingService.createListing(data, urls).then((value) => {
                 toast.success(value.data.message)
                 const id = value.data.data.listingPost._id
-                console.log();
                 navigate(`/listing/${id}`)
             }).catch((error) => {
                 toast.error(error);

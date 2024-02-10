@@ -9,7 +9,6 @@ function Contact({ listing,user }) {
     setMessage(e.target.value);
   };
 
-    // console.log(user.email);
     return (
         <AnimationContainer>
             <div className='flex flex-col gap-2'>

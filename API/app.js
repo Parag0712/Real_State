@@ -1,6 +1,7 @@
 import express from 'express'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
+import path from 'path';
 const app = express();
 
 // Cors 
@@ -10,6 +11,7 @@ app.use(cors(
         credentials: true
     }
 ));
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true, limit: "16kb" }));
@@ -35,9 +37,14 @@ app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/listing", listingRouter);
 // Export App
-app.get("/", function (req, res) {
-    res.send("helo")
+
+
+app.use(express.static(path.join(__dirname, '/RealState/dist')));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'RealState', 'dist', 'index.html'));
 })
+
 
 
 export { app }

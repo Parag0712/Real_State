@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useId, useState } from 'react'
 import AnimationContainer from '../components/AnimationContainer'
 import ListingService from '../Backedend/listing'
 import { Link } from 'react-router-dom';
@@ -11,7 +11,6 @@ import Loading from '../components/Loading';
 
 
 function Home() {
-
   SwiperCore.use([Navigation])
   const [listing, setListing] = useState([]);
   useEffect(() => {
@@ -64,9 +63,9 @@ function Home() {
         }} navigation modules={[Pagination]}>
           {listing &&
             listing.length > 0 &&
-            listing.map((listing) => (
-              <SwiperSlide>
-                <div
+            listing.map((listing,index) => (
+              <SwiperSlide key={index}>
+                <div 
                   style={{
                     background: `url(${listing.imageUrls[0]}) center no-repeat`,
                     backgroundSize: 'cover',
@@ -88,9 +87,9 @@ function Home() {
                 <Link className='text-sm text-blue-800 hover:underline' to={'/search?offer=true'}>Show more offers</Link>
               </div>
               <div className='flex flex-wrap gap-4'>
-                {sortedListings.map((listing) => (
+                {sortedListings.map((listing,index) => (
                   <ListingItem
-                    key={listing._id}
+                    key={index}
                     id={listing._id}
                     img={listing.imageUrls[0]}
                     name={listing.name}
@@ -115,7 +114,7 @@ function Home() {
                 <Link className='text-sm text-blue-800 hover:underline' to={'/search?type=rent'}>Show more places for rent</Link>
               </div>
               <div className='flex flex-wrap gap-4'>
-              {rentListings.map((listing) => (
+              {rentListings.map((listing,index) => (
                   <ListingItem
                     key={listing._id}
                     id={listing._id}
@@ -142,7 +141,7 @@ function Home() {
                 <Link className='text-sm text-blue-800 hover:underline' to={'/search?type=sale'}>Show more places for sale</Link>
               </div>
               <div className='flex flex-wrap gap-4'>
-              {sellListings.map((listing) => (
+              {sellListings.map((listing,index) => (
                   <ListingItem
                     key={listing._id}
                     id={listing._id}

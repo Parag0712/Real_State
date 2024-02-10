@@ -54,6 +54,24 @@ class Auth {
         }
     }
 
+    async refreshToken(id) {
+        // console.log(id);
+        try {
+            const response = await this.api.get('auth/refresh-token',{
+                params: {
+                    param1: id,
+                }
+            });
+            return response.data;
+        } catch (error) {
+            if (error.response.data) {
+                throw error.response.data.message;
+            } else {
+                throw error
+            }
+        }
+    }
+
     async updateAccount({ email, username , password ,avatar }) {
         try {
             const response = await this.api.patch('user/update-account', {
