@@ -32,7 +32,7 @@ function SignUp() {
         const refreshToken = data.data.refreshToken;
         const accessToken = data.data.accessToken;
         const userData = { ...data.data.user, refreshToken, accessToken };
-
+        console.log(val);
         dispatch(signInSuccess(userData));
         toast.success(val.message)
         navigate('/')

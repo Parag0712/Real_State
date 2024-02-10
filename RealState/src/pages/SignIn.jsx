@@ -26,11 +26,12 @@ function SignIn() {
         const accessToken = data.data.accessToken;
         const userData = { ...data.data.user, refreshToken, accessToken };
         dispatch(signInSuccess(userData));
+        console.log(val);
         toast.success(val.message)
         navigate('/')
       }).catch((error) => {
-        dispatch(signInFailure(error));
         toast.error(error);
+        dispatch(signInFailure(error));
       })
   }
 
