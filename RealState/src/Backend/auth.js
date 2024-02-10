@@ -4,8 +4,8 @@ class Auth {
 
     constructor() {
         this.api = axios.create({
-            baseURL: '/api/v1/', // Assuming your API base URL is /api/v1/auth
-            withCredentials: true // Adding credentials option
+            baseURL: '/api/v1/', 
+            withCredentials: true
         });
     }
 
@@ -44,6 +44,7 @@ class Auth {
                     'Content-Type': 'application/json'
                 }
             });
+            console.log(response);
             return response.data;
         } catch (error) {
             if (error.response.data) {

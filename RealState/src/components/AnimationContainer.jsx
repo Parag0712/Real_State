@@ -6,6 +6,7 @@ function AnimationContainer({ children, className }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            
             className={className}
             transition={{ duration: 0.4, ease: "easeInOut" }}
         >

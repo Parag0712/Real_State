@@ -101,7 +101,7 @@ class Listing {
     //Gte Listing 
     async getListing(id) {
         try {
-            const response = await this.api.get(`/get-listing//${id}`);
+            const response = await this.api.get(`/get-listing/${id}`);
             return response.data;
         } catch (error) {
             if (error?.response?.data) {

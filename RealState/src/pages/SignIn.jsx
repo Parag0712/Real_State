@@ -22,11 +22,10 @@ function SignIn() {
     dispatch(signInStart());
     AuthService.login(data)
       .then((val) => {
-        const refreshToken = data.data.refreshToken;
-        const accessToken = data.data.accessToken;
-        const userData = { ...data.data.user, refreshToken, accessToken };
+        const refreshToken =val.data.refreshToken;
+        const accessToken = val.data.accessToken;
+        const userData = { ...val.data.user, refreshToken, accessToken };
         dispatch(signInSuccess(userData));
-        console.log(val);
         toast.success(val.message)
         navigate('/')
       }).catch((error) => {

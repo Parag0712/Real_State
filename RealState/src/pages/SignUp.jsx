@@ -29,10 +29,9 @@ function SignUp() {
     AuthService.createAccount(data)
       .then((val) => {
 
-        const refreshToken = data.data.refreshToken;
-        const accessToken = data.data.accessToken;
-        const userData = { ...data.data.user, refreshToken, accessToken };
-        console.log(val);
+        const refreshToken = val.data.refreshToken;
+        const accessToken = val.data.accessToken;
+        const userData = { ...val.data.user, refreshToken, accessToken };
         dispatch(signInSuccess(userData));
         toast.success(val.message)
         navigate('/')

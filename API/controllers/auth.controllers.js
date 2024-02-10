@@ -56,10 +56,7 @@ export const register = asyncHandler(async (req, res) => {
             { message: "Something went wrong while registering the user" }
         )
     }
-
     const { accessToken, refreshToken } = await generateAccessTokenAndRefreshToken(user._id);
-
-
     
     return res
         .status(200)

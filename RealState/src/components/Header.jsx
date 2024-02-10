@@ -11,6 +11,7 @@ function Header() {
     const [searchTerm,setSearchTerm] = useState('');
     const navigate = useNavigate();
 
+    
     const handleSubmit = (e)=>{
         e.preventDefault();
         const urlParams = new URLSearchParams(window.location.search);  

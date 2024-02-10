@@ -3,18 +3,16 @@ import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import path from 'path';
 
-const __dirname = path.resolve();
+// const __dirname = path.resolve();
 
 
 const app = express();
 
-// Cors 
-app.use(cors(
-    {
-        origin: process.env.CORS_ORIGIN,
-        credentials: true
-    }
-));
+// Now Cors Which Site Request Allow
+app.use(cors({
+    origin: process.env.CORS_ORIGIN,
+    credentials: true
+}));
 
 
 app.use(express.json());
@@ -41,9 +39,6 @@ app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/listing", listingRouter);
 // Export App
-
-
-
 
 app.use(express.static(path.join(__dirname, '/RealState/dist')));
 
