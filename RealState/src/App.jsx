@@ -32,10 +32,7 @@ function App() {
       }).catch((error) => {
         console.log(error);
       })
-    }
-
-
-    
+    }    
     dispatch(signInStart());
     AuthService.getAuthUser()
       .then((val) => {
@@ -47,8 +44,6 @@ function App() {
         dispatch(signInFailure(error));
       })
   }, [])
-
-
   if(error) dispatch(signOutUserSuccess);
   return (
     <>
