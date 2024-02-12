@@ -30,6 +30,7 @@ function App() {
     if (currentUser) {
       AuthService.refreshToken(currentUser?.refreshToken).then((data) => {
       }).catch((error) => {
+        setError(true);
         console.log(error);
       })
     }    
