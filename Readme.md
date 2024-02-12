@@ -18,7 +18,8 @@ The Real Estate Project is a web application designed for browsing and managing 
   - React.js
   - React Form Hook
   - Tailwind CSS
-
+  - redux
+  
 - Backend:
   - Node.js
   - Express.js
