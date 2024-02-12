@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Route, Routes, BrowserRouter } from 'react-router-dom'
 import Home from './pages/Home'
 import SignIn from './pages/SignIn'
@@ -10,7 +10,7 @@ import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import { useDispatch, useSelector } from 'react-redux'
 import AuthService from './Backend/auth'
-import { signInFailure, signInStart, signInSuccess } from './redux/User/userSlice'
+import { signInFailure, signOutUserSuccess,signInStart, signInSuccess } from './redux/User/userSlice'
 import ProtectedRoute from './components/ProtectedRoute'
 import CreateListing from './pages/CreateListing'
 import UpdateListing from './pages/UpdateListing'
@@ -21,6 +21,7 @@ import ListingPage from './pages/ListingPage'
 
 function App() {
 
+  const [error,setError] =useState(false);
   const { currentUser, loading } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
@@ -34,6 +35,7 @@ function App() {
     }
 
 
+    
     dispatch(signInStart());
     AuthService.getAuthUser()
       .then((val) => {
@@ -41,11 +43,13 @@ function App() {
         const userData = { ...val.data.user, refreshToken, accessToken };
         dispatch(signInSuccess(userData));
       }).catch((error) => {
-        dispatch(signInFailure());
+        setError(true);
+        dispatch(signInFailure(error));
       })
   }, [])
 
 
+  if(error) dispatch(signOutUserSuccess);
   return (
     <>
       {loading && <Loading></Loading>}

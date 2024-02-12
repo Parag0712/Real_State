@@ -125,12 +125,13 @@ function Profile() {
     dispatch(signOutUserStart());
     AuthService.logout()
       .then((data) => {
-        persistStore(store).purge();
         toast.success(data.message);
         dispatch(signOutUserSuccess());
       }).catch((error) => {
         toast.error(error);
         dispatch(signOutUserFailure(error));
+      }).finally(()=>{
+        dispatch(signOutUserSuccess())
       })
   }
 
